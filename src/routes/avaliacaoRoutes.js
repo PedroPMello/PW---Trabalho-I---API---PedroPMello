@@ -12,4 +12,6 @@ router.put('/avaliacoes/:id', avaliacaoController.updateAvaliacao);
 
 router.delete('/avaliacoes/:id', avaliacaoController.deleteAvaliacao);
 
+router.get('/avaliacoes/filme/:id', avaliacaoController.getAvaliacoesPorFilme);
+
 module.exports = router;

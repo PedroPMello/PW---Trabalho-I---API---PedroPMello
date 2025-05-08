@@ -1,5 +1,6 @@
 const Filme = require('../models/Filme');
 
+
 const getAllFilmes = async (req, res) => {
   try {
     const filmes = await Filme.getAllFilmes();

@@ -10,6 +10,17 @@ const getAllAvaliacoes = async (req, res) => {
   }
 };
 
+const getAvaliacoesPorFilme = async (req, res) => {
+  try {
+    const filmeId = parseInt(req.params.id);
+    const avaliacoes = await Avaliacao.getAvaliacoesPorFilme(filmeId);
+    res.json(avaliacoes);
+  } catch (error) {
+    console.error('Erro ao buscar avaliações:', error);
+    res.status(500).json({ message: 'Erro interno no servidor' });
+  }
+};
+
 const getAvaliacaoById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -63,4 +74,4 @@ const deleteAvaliacao = async (req, res) => {
   }
 };
 
-module.exports = { getAllAvaliacoes, getAvaliacaoById, createAvaliacao, updateAvaliacao, deleteAvaliacao, };
+module.exports = { getAllAvaliacoes, getAvaliacaoById, createAvaliacao, updateAvaliacao, deleteAvaliacao, getAvaliacoesPorFilme, };

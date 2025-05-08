@@ -16,7 +16,8 @@ const login = async (req, res) => {
         SECRET,
         { expiresIn: '1h' }
       );
-      return res.json({ token, role: 'admin' });
+
+      return res.json({ token, role: 'admin', administradorId: administrador.id });
     }
 
     const userResult = await pool.query('SELECT * FROM usuario WHERE email = $1', [email]);
@@ -28,7 +29,8 @@ const login = async (req, res) => {
         SECRET,
         { expiresIn: '1h' }
       );
-      return res.json({ token, role: 'usuario' });
+
+      return res.json({ token, role: 'usuario', usuarioId: usuario.id });
     }
 
     return res.status(401).json({ message: 'Credenciais inválidas' });

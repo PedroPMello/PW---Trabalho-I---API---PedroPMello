@@ -5,6 +5,12 @@ const getAllAvaliacoes = async () => {
   return result.rows;
 };
 
+const getAvaliacoesPorFilme = async (filmeId) => {
+  const query = 'SELECT * FROM avaliacao WHERE filme_id = $1';
+  const { rows } = await pool.query(query, [filmeId]);
+  return rows;
+};
+
 const getAvaliacaoById = async (id) => {
   const result = await pool.query('SELECT * FROM avaliacao WHERE id = $1', [id]);
   return result.rows[0];
@@ -32,4 +38,4 @@ const deleteAvaliacao = async (id) => {
   await pool.query('DELETE FROM avaliacao WHERE id = $1', [id]);
 };
 
-module.exports = { getAllAvaliacoes, getAvaliacaoById, createAvaliacao, updateAvaliacao, deleteAvaliacao, };
+module.exports = { getAllAvaliacoes, getAvaliacaoById, createAvaliacao, updateAvaliacao, deleteAvaliacao, getAvaliacoesPorFilme, };
