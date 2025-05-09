@@ -6,19 +6,19 @@ let pool = null;
 
 if (isProduction) {
     pool = new Pool({
-        connectionString : process.env.DATABASE_URL, 
-        ssl : {
-            rejectUnauthorized : false,
-        }
-    })
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false,
+        },
+    });
 } else {
-    pool = new Pool ({
-        user : 'postgres',
-        password : '1234',
-        database : 'Trabalho I - PW - PedroPMello',
-        port : 5432,
-        host : 'localhost'
-    })
+    pool = new Pool({
+        user: 'postgres',
+        password: '1234',
+        database: 'trabalho-i-pw-pedropmello', 
+        port: 5432,
+        host: 'localhost',
+    });
 }
 
-module.exports = { pool }
+module.exports = { pool };
