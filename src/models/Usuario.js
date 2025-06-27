@@ -20,11 +20,33 @@ const createUsuario = async (usuario) => {
 };
 
 const updateUsuario = async (id, usuario) => {
-  const { nome, email, senha } = usuario;
-  const result = await pool.query(
-    'UPDATE usuario SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *',
-    [nome, email, senha, id]
-  );
+  let query = 'UPDATE usuario SET ';
+  const updates = [];
+  const values = [];
+  let paramCount = 1;
+
+  if (usuario.nome !== undefined) {
+    updates.push(`nome = $${paramCount++}`);
+    values.push(usuario.nome);
+  }
+  if (usuario.email !== undefined) {
+    updates.push(`email = $${paramCount++}`);
+    values.push(usuario.email);
+  }
+  if (usuario.senha !== undefined && usuario.senha !== '') {
+    updates.push(`senha = $${paramCount++}`);
+    values.push(usuario.senha);
+  }
+
+  if (updates.length === 0) {
+    const result = await pool.query('SELECT * FROM usuario WHERE id = $1', [id]);
+    return result.rows[0];
+  }
+
+  query += updates.join(', ') + ` WHERE id = $${paramCount++} RETURNING *`;
+  values.push(id);
+
+  const result = await pool.query(query, values);
   return result.rows[0];
 };
 

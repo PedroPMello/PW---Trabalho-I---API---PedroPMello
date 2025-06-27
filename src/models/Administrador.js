@@ -20,13 +20,36 @@ const createAdministrador = async (admin) => {
 };
 
 const updateAdministrador = async (id, admin) => {
-  const { nome, email, senha } = admin;
-  const result = await pool.query(
-    'UPDATE administrador SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *',
-    [nome, email, senha, id]
-  );
+  let query = 'UPDATE administrador SET ';
+  const updates = [];
+  const values = [];
+  let paramCount = 1;
+
+  if (admin.nome !== undefined) {
+    updates.push(`nome = $${paramCount++}`);
+    values.push(admin.nome);
+  }
+  if (admin.email !== undefined) {
+    updates.push(`email = $${paramCount++}`);
+    values.push(admin.email);
+  }
+  if (admin.senha !== undefined && admin.senha !== '') {
+    updates.push(`senha = $${paramCount++}`);
+    values.push(admin.senha);
+  }
+
+  if (updates.length === 0) {
+    const result = await pool.query('SELECT * FROM administrador WHERE id = $1', [id]);
+    return result.rows[0];
+  }
+
+  query += updates.join(', ') + ` WHERE id = $${paramCount++} RETURNING *`;
+  values.push(id);
+
+  const result = await pool.query(query, values);
   return result.rows[0];
 };
+
 
 const deleteAdministrador = async (id) => {
   await pool.query('DELETE FROM administrador WHERE id = $1', [id]);

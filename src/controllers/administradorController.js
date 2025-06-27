@@ -13,12 +13,16 @@ const getAllAdministradores = async (req, res) => {
 const getAdministradorById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+
+    if (req.user.role === 'admin' && req.user.id !== id) {
+        return res.status(403).json({ message: 'Acesso negado: Administrador só pode ver seus próprios dados.' });
+    }
+
     const administrador = await Administrador.getAdministradorById(id);
 
     if (!administrador) {
       return res.status(404).json({ message: 'Administrador não encontrado' });
     }
-
     res.json(administrador);
   } catch (error) {
     console.error('Erro ao buscar administrador:', error);
@@ -28,7 +32,8 @@ const getAdministradorById = async (req, res) => {
 
 const createAdministrador = async (req, res) => {
   try {
-    const novoAdministrador = await Administrador.createAdministrador(req.body);
+    const { nome, email, senha } = req.body;
+    const novoAdministrador = await Administrador.createAdministrador({ nome, email, senha });
     res.status(201).json(novoAdministrador);
   } catch (error) {
     console.error('Erro ao criar administrador:', error);
@@ -39,12 +44,17 @@ const createAdministrador = async (req, res) => {
 const updateAdministrador = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const administradorAtualizado = await Administrador.updateAdministrador(id, req.body);
+
+    if (req.user.role === 'admin' && req.user.id !== id) {
+        return res.status(403).json({ message: 'Acesso negado: Administrador só pode atualizar seus próprios dados.' });
+    }
+
+    const { nome, email, senha } = req.body;
+    const administradorAtualizado = await Administrador.updateAdministrador(id, { nome, email, senha });
 
     if (!administradorAtualizado) {
       return res.status(404).json({ message: 'Administrador não encontrado' });
     }
-
     res.json(administradorAtualizado);
   } catch (error) {
     console.error('Erro ao atualizar administrador:', error);
@@ -55,6 +65,11 @@ const updateAdministrador = async (req, res) => {
 const deleteAdministrador = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+
+    if (req.user.id === id) {
+        return res.status(403).json({ message: 'Acesso negado: Administrador não pode deletar a si mesmo.' });
+    }
+
     await Administrador.deleteAdministrador(id);
     res.status(204).send();
   } catch (error) {
@@ -63,4 +78,4 @@ const deleteAdministrador = async (req, res) => {
   }
 };
 
-module.exports = { getAllAdministradores, getAdministradorById, createAdministrador, updateAdministrador, deleteAdministrador, };
+module.exports = { getAllAdministradores, getAdministradorById, createAdministrador, updateAdministrador, deleteAdministrador,};
