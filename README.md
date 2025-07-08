@@ -1,6 +1,6 @@
 # PW---Trabalho-I---API---PedroPMello
 
-Esta é a API desenvolvida em Node.js para a aplicação "Site de Filmes". Ela fornece os dados e a lógica de negócios para o frontend, incluindo autenticação de usuários, gerenciamento de filmes e controle de acesso baseado em funções (administrador/usuário).
+Esta é a API desenvolvida em Node.js para a aplicação "Site de Filmes", desenvolvida como parte de um Trabalho Prático para a disciplina de Programação para WEB (Ciência da Computação - IFSul). Ela fornece os dados e a lógica de negócios para o frontend, incluindo autenticação de usuários, gerenciamento de filmes e controle de acesso baseado em funções (administrador/usuário).
 
 ## Funcionalidades
 
